@@ -1,0 +1,18 @@
+The Office of Policy and Management maintains a listing of all real estate sales with a sales price of $2,000 or greater that occur between October 1 and September 30 of each year. For each sale record, the file includes: town, property address, date of sale, property type (residential, apartment, commercial, industrial or vacant land), sales price, and property assessment.		
+		
+		
+		
+Serial Number	Serial number	Number
+List Year	Year the property was listed for sale	Number
+Date Recorded	Date the sale was recorded locally	Date & Time
+Town	Town name	Plain Text
+Address	Address	Plain Text
+Assessed Value	Value of the property used for local tax assesment	Number
+Sale Amount	Amount the property was sold for	Number
+Sales Ratio	Ratio of the sale price to the assessed value	Plain Text
+Property Type	Type of property including: Residential, Commercial, Industrial, Apartments, Vacant, etc	Plain Text
+Residential Type	Indicates whether property is single or multifamily residential	Plain Text
+Non Use Code	Non usable sale code typically means the sale price is not reliable for use in the determination of a property value. See attachments in the dataset description page for a listing of codes	Plain Text
+Assessor Remarks	Remarks from the assessor	Plain Text
+OPM remarks	Remarks from OPM	Plain Text
+Location	Lat / lon coordinates	Point
