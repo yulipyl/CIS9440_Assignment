@@ -1,54 +1,62 @@
-CREATE  TABLE "REAL_EST_DATA".REAL_EST_SCH.DIM_DATE ( 
-	DATE_ID              integer NOT NULL   ,
-	DATE_ORIGINAL_FORMAT date    ,
-	DATE_ISO_FORMAT      date    ,
-	YEAR                 integer    ,
-	QUARTER              integer    ,
-	MONTH                integer    ,
-	DAY                  integer    ,
-	MONTHNAME            varchar(50)    ,
-	DAYNAME              varchar(50)    ,
-	WEEKOFTHEYEAR        integer    ,
-	CONSTRAINT PK_DIM_DATE PRIMARY KEY ( DATE_ID )
+CREATE SCHEMA IF NOT EXISTS "realest";
+
+CREATE  TABLE "realest".dim_date ( 
+	date_id              BIGINT  NOT NULL  ,
+	date_original_format DATE    ,
+	date_iso_format      DATE    ,
+	"year"               INT    ,
+	quarter              INT    ,
+	"month"              INT    ,
+	"day"                INT    ,
+	monthname            VARCHAR(50)    ,
+	dayname              VARCHAR(50)    ,
+	weekoftheyear        INT    ,
+	CONSTRAINT pk_dim_date PRIMARY KEY ( date_id )
  );
 
-CREATE  TABLE "REAL_EST_DATA".REAL_EST_SCH.DIM_LOCATION ( 
-	LOCATION_ID          integer NOT NULL   ,
-	TOWN                 varchar(50)    ,
-	ADDRESS              varchar(250)    ,
-	CONSTRAINT PK_DIM_LOCATION PRIMARY KEY ( LOCATION_ID )
+CREATE  TABLE "realest".dim_location ( 
+	location_id          INT  NOT NULL  ,
+	town                 VARCHAR(50)    ,
+	address              VARCHAR(250)    ,
+	CONSTRAINT pk_dim_location PRIMARY KEY ( location_id )
  );
 
-CREATE  TABLE "REAL_EST_DATA".REAL_EST_SCH.DIM_PROPERTY_TYPE ( 
-	PROPERTYTYPE_ID      integer NOT NULL   ,
-	CONSTRAINT PK_DIM_PROPERTY_TYPE PRIMARY KEY ( PROPERTYTYPE_ID )
+CREATE  TABLE "realest".dim_property_type ( 
+	propertytype_id      INT  NOT NULL  ,
+	propertytype         VARCHAR    ,
+	CONSTRAINT pk_dim_property_type PRIMARY KEY ( propertytype_id )
  );
 
-CREATE  TABLE "REAL_EST_DATA".REAL_EST_SCH.DIM_RESIDENTIAL_TYPE ( 
-	RESIDENTIALTYPE_ID   integer NOT NULL   ,
-	CONSTRAINT PK_DIM_RESIDENTIAL_TYPE PRIMARY KEY ( RESIDENTIALTYPE_ID )
+CREATE  TABLE "realest".dim_residential_type ( 
+	residentialtype_id   INT  NOT NULL  ,
+	residential_type     VARCHAR    ,
+	CONSTRAINT pk_dim_residential_type PRIMARY KEY ( residentialtype_id )
+ );
+
+CREATE  TABLE "realest".entity ( 
+ );
+
+CREATE  TABLE "realest".facts_realestate ( 
+	fact_id              BIGINT  NOT NULL  ,
+	sales_amount         DECIMAL(12,2)    ,
+	assessed_value       DECIMAL(12,2)    ,
+	sales_ratio          DECIMAL(8,4)    ,
+	location_id          INT    ,
+	recordeddate_id      INT    ,
+	listeddate_id        INT    ,
+	propertytype_id      INT    ,
+	residentialtype_id   INT    ,
+	CONSTRAINT pk_facts_sales PRIMARY KEY ( fact_id )
  );
 
 
-CREATE  TABLE "REAL_EST_DATA".REAL_EST_SCH.FACTS_REALESTATE ( 
-	FACT_ID              integer NOT NULL   ,
-	SALES_AMOUNT         number(7,2)    ,
-	ASSESSED_VALUE       number(7,2)    ,
-	SALES_RATIO          number(6,4)    ,
-	LOCATION_ID          integer    ,
-	RECORDEDDATE_ID      integer    ,
-	LISTEDDATE_ID        integer    ,
-	PROPERTYTYPE_ID      integer    ,
-	RESIDENTIALTYPE_ID   integer    ,
-	CONSTRAINT PK_FACTS_SALES PRIMARY KEY ( FACT_ID )
- );
 
-ALTER TABLE "REAL_EST_DATA".REAL_EST_SCH.FACTS_REALESTATE ADD CONSTRAINT FK_FACTS_REALESTATE_DIM_DATE FOREIGN KEY ( RECORDEDDATE_ID ) REFERENCES "REAL_EST_DATA".REAL_EST_SCH.DIM_DATE( DATE_ID ) ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE "realest".facts_realestate ADD CONSTRAINT fk_facts_realestate_dim_date FOREIGN KEY ( recordeddate_id ) REFERENCES "realest".dim_date( date_id );
 
-ALTER TABLE "REAL_EST_DATA".REAL_EST_SCH.FACTS_REALESTATE ADD CONSTRAINT FK_FACTS_REALESTATE_DIM_DATE_0 FOREIGN KEY ( LISTEDDATE_ID ) REFERENCES "REAL_EST_DATA".REAL_EST_SCH.DIM_DATE( DATE_ID ) ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE "realest".facts_realestate ADD CONSTRAINT fk_facts_realestate_dim_date_0 FOREIGN KEY ( listeddate_id ) REFERENCES "realest".dim_date( date_id );
 
-ALTER TABLE "REAL_EST_DATA".REAL_EST_SCH.FACTS_REALESTATE ADD CONSTRAINT FK_FACTS_REALESTATE_DIM_PROPERTY_TYPE FOREIGN KEY ( PROPERTYTYPE_ID ) REFERENCES "REAL_EST_DATA".REAL_EST_SCH.DIM_PROPERTY_TYPE( PROPERTYTYPE_ID ) ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE "realest".facts_realestate ADD CONSTRAINT fk_facts_realestate_dim_property_type FOREIGN KEY ( propertytype_id ) REFERENCES "realest".dim_property_type( propertytype_id );
 
-ALTER TABLE "REAL_EST_DATA".REAL_EST_SCH.FACTS_REALESTATE ADD CONSTRAINT FK_FACTS_REALESTATE_DIM_RESIDENTIAL_TYPE FOREIGN KEY ( RESIDENTIALTYPE_ID ) REFERENCES "REAL_EST_DATA".REAL_EST_SCH.DIM_RESIDENTIAL_TYPE( RESIDENTIALTYPE_ID ) ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE "realest".facts_realestate ADD CONSTRAINT fk_facts_realestate_dim_residential_type FOREIGN KEY ( residentialtype_id ) REFERENCES "realest".dim_residential_type( residentialtype_id );
 
-ALTER TABLE "REAL_EST_DATA".REAL_EST_SCH.FACTS_REALESTATE ADD CONSTRAINT FK_FACTS_REALESTATE_DIM_LOCATION FOREIGN KEY ( LOCATION_ID ) REFERENCES "REAL_EST_DATA".REAL_EST_SCH.DIM_LOCATION( LOCATION_ID ) ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE "realest".facts_realestate ADD CONSTRAINT fk_facts_realestate_dim_location FOREIGN KEY ( location_id ) REFERENCES "realest".dim_location( location_id );
