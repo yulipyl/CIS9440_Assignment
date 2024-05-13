@@ -1,4 +1,0 @@
-mkdir "SQL Queries"
-touch "SQL Queries/.gitkeep"
-git add "SQL Queries/.gitkeep"
-git commit -m "Add 'SQL Queries' folder"

@@ -1,0 +1,48 @@
+/* an average of the sales by property type in 2018 */
+
+SELECT
+    pt.propertytype,
+    AVG(fs.sales_amount) as average_sales
+FROM
+    "realest".facts_realestate fs
+JOIN
+    "realest".dim_property_type pt ON CAST(fs.propertytype_id AS INT) = pt.propertytype_id
+JOIN
+    "realest".dim_date dt ON CAST(fs.recordeddate_id AS INT) = dt.date_id
+WHERE
+    dt."year" = 2018
+GROUP BY
+    pt.propertytype;
+
+/* town with the lowest average price sales and a property type  */
+
+SELECT
+    l.town,
+    pt.propertytype,
+    AVG(fs.sales_amount) as average_sales
+FROM
+    "realest".facts_realestate fs
+JOIN
+    "realest".dim_property_type pt ON CAST(fs.propertytype_id AS INT) = pt.propertytype_id
+JOIN
+    "realest".dim_location l ON CAST(fs.location_id AS INT) = l.location_id
+GROUP BY
+    l.town, pt.propertytype
+ORDER BY
+    average_sales ASC
+LIMIT 1;
+
+/* a quarter with the highest number of sales */
+SELECT
+    dt."year",
+    dt.quarter,
+    COUNT(fs.fact_id) as number_of_sales
+FROM
+    "realest".facts_realestate fs
+JOIN
+    "realest".dim_date dt ON CAST(fs.recordeddate_id AS INT) = dt.date_id
+GROUP BY
+    dt."year", dt.quarter
+ORDER BY
+    number_of_sales DESC
+LIMIT 1;
